@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes Website</title>
+    <script>
+        // Function to load the notes from the server
+        async function loadNotes() {
+            try {
+                // Make a fetch call to the server pointing at notes.txt 
+                const response = await fetch('http://localhost:8000/notes.txt');
+
+                // Check the success of the response
+                if (!response.ok) {
+                    // If it wasn't ok, throw an error
+                    throw new Error('Network response was not ok');
+                }
+                // Get the text from the response
+                const text = await response.text();
+
+                // Set the value of the text area to the text
+                document.getElementById('notes').value = text;
+            } catch (error) {
+                console.error('Failed to fetch notes:', error);
+            }
+        }
+
+        // Function to save the notes to the server
+        async function saveNotes(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Get the 'notes' text area element value
+            const notes = document.getElementById('notes').value;
+            try {
+                // Call a fetch function at the localhost pointing to notes.txt
+                const response = await fetch('http://localhost:8000/notes.txt', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    },
+                    body: notes,
+                });
+
+                // Check the success of the response
+                if (!response.ok) {
+                    // If it wasn't ok, throw an error
+                    throw new Error('Network response was not ok');
+                }
+                alert('Notes saved successfully!'); // Tell the user that the note was saved
+            } catch (error) {
+                console.error('Failed to save notes:', error); // Tell the user that the not was not saved and why
+            }
+        }
+
+        // Add event listeners once the window loads
+        window.addEventListener('load', () => {
+            loadNotes(); // Load notes when the page is loaded
+            document.querySelector('form').addEventListener('submit', saveNotes); // Add an event listener with the saveNotes callback to the form
+        });
+    </script>
+</head>
+<body>
+    <h1>Notes Website</h1>
+    <p>This website keeps a file called notes.txt for you.</p>
+    <p>To create a notes.txt type in the box and press the "Save" button.</p>
+    <p>You can edit the file and save it again.</p>
+    <p>Next time you access this page, it will load the notes.txt you saved last time.</p>
+    <form>
+        <textarea id="notes" style="width: 500px; height: 250px"></textarea>
+        <br>
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>
