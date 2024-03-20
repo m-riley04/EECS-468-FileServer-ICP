@@ -5,6 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notes Website</title>
     <script>
+
+        // Function to create a notes.txt file
+        async function createNotes() {
+            try {
+                // Fetch the notes.txt file of localhost with a "PUT" method
+                const response = await fetch('http://localhost:8000/notes.txt', {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    },
+                    body: ""
+                })
+
+                // Check if the response failed
+                if (!response.ok) {
+                    // If it did, throw error
+                    throw new Error("Network response was not okay");
+                }
+            } catch (error) {
+                // If an error occurred, tell the user
+                console.error("Unable to create notes.txt file: " + error);
+            }
+        }
+
         // Function to load the notes from the server
         async function loadNotes() {
             try {
@@ -22,7 +46,12 @@
                 // Set the value of the text area to the text
                 document.getElementById('notes').value = text;
             } catch (error) {
+                // Tell the user if an error occurred
                 console.error('Failed to fetch notes:', error);
+
+                // Attempt to create the file if it does not exist
+                console.log("Attempting to create new notes.txt file...");
+                await createNotes();
             }
         }
 
