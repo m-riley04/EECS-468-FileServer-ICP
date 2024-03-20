@@ -64,12 +64,15 @@ methods.GET = async function(request) {
     try {
         stats = await stat(path);
     } catch (error) {
+		// Check if the file exists
         if (error.code != "ENOENT") throw error;
         else return {status: 404, body: "File not found"};
     }
     if (stats.isDirectory()) {
-        return {body: 'Directory access is forbidden', status: 403}; // Change to suit your needs
+		// If it's a directory...
+        return {body: 'Directory access is forbidden', status: 403};
     } else {
+		// Otherwise, create a read stream
         return {body: createReadStream(path), type: mime.getType(path)};
     }
 };
