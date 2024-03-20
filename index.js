@@ -3,9 +3,9 @@ const {createServer} = require("http");
 const methods = Object.create(null);  
 createServer((request, response) => {  
 	// Set CORS headers
-    response.setHeader('Access-Control-Allow-Origin', '*'); // Allows any domain to access your server
-    response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    response.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // Adjust as necessary
+    response.setHeader('Access-Control-Allow-Origin', '*'); // Allows any domain to access
+    response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'); // Set the allowed methods
+    response.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // Set the allowed headers
 
     // Handle preflight requests for CORS
     if (request.method === "OPTIONS") {
